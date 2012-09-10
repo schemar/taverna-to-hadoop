@@ -1,4 +1,4 @@
-package de.tuberlin.schenck.taverna_compilation.convert;
+package de.tuberlin.schenck.taverna_to_hadoop.convert;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,8 +8,8 @@ import org.apache.log4j.Logger;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.api.io.ReaderException;
 import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
-import de.tuberlin.schenck.taverna_compilation.convert.translators.WorkflowTranslator;
-import de.tuberlin.schenck.taverna_compilation.exceptions.UnsupportedWorkflowException;
+import de.tuberlin.schenck.taverna_to_hadoop.convert.translators.WorkflowTranslator;
+import de.tuberlin.schenck.taverna_to_hadoop.exceptions.UnsupportedWorkflowException;
 
 public class WorkflowManager {
 	/** The logger for this class. */

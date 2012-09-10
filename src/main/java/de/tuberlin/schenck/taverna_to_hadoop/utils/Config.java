@@ -1,4 +1,4 @@
-package de.tuberlin.schenck.taverna_compilation.utils;
+package de.tuberlin.schenck.taverna_to_hadoop.utils;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;

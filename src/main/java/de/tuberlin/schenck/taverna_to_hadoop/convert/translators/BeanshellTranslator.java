@@ -1,4 +1,4 @@
-package de.tuberlin.schenck.taverna_compilation.convert.translators;
+package de.tuberlin.schenck.taverna_to_hadoop.convert.translators;
 
 import org.apache.log4j.Logger;
 

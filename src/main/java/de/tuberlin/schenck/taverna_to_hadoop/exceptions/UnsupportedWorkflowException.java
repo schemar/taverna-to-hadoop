@@ -1,4 +1,4 @@
-package de.tuberlin.schenck.taverna_compilation.exceptions;
+package de.tuberlin.schenck.taverna_to_hadoop.exceptions;
 
 public class UnsupportedWorkflowException extends Exception {
 	private static final long serialVersionUID = 4651018486411301562L;

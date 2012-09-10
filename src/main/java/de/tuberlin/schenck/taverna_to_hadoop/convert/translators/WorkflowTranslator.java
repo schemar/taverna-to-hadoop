@@ -1,4 +1,4 @@
-package de.tuberlin.schenck.taverna_compilation.convert.translators;
+package de.tuberlin.schenck.taverna_to_hadoop.convert.translators;
 
 import org.apache.log4j.Logger;
 
@@ -6,7 +6,7 @@ import uk.org.taverna.scufl2.api.activity.Activity;
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
 import uk.org.taverna.scufl2.api.property.PropertyException;
 import uk.org.taverna.scufl2.translator.t2flow.defaultactivities.BeanshellActivityParser;
-import de.tuberlin.schenck.taverna_compilation.utils.Config;
+import de.tuberlin.schenck.taverna_to_hadoop.utils.Config;
 
 public class WorkflowTranslator extends TemplateTranslator {
 	/** The logger for this class. */

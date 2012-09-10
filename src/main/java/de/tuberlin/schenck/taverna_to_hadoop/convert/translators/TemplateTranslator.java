@@ -1,4 +1,4 @@
-package de.tuberlin.schenck.taverna_compilation.convert.translators;
+package de.tuberlin.schenck.taverna_to_hadoop.convert.translators;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import java.util.regex.Pattern;
 
 import org.apache.log4j.Logger;
 
-import de.tuberlin.schenck.taverna_compilation.utils.Config;
-import de.tuberlin.schenck.taverna_compilation.utils.FileUtils;
+import de.tuberlin.schenck.taverna_to_hadoop.utils.Config;
+import de.tuberlin.schenck.taverna_to_hadoop.utils.FileUtils;
 
 /**
  * Translates templates into java source files.

@@ -1,4 +1,4 @@
-package de.tuberlin.schenck.taverna_compilation;
+package de.tuberlin.schenck.taverna_to_hadoop;
 
 import java.util.Locale;
 
@@ -15,8 +15,8 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
 
-import de.tuberlin.schenck.taverna_compilation.convert.TavernaToHadoopConverter;
-import de.tuberlin.schenck.taverna_compilation.utils.Config;
+import de.tuberlin.schenck.taverna_to_hadoop.convert.TavernaToHadoopConverter;
+import de.tuberlin.schenck.taverna_to_hadoop.utils.Config;
 
 /**
  * Main class to convert Taverna workflows to Hadoop jobs.

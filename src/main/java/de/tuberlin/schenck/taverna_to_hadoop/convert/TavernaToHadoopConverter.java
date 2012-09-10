@@ -1,11 +1,11 @@
-package de.tuberlin.schenck.taverna_compilation.convert;
+package de.tuberlin.schenck.taverna_to_hadoop.convert;
 
 import org.apache.log4j.Logger;
 
-import de.tuberlin.schenck.taverna_compilation.convert.translators.TemplateTranslator;
-import de.tuberlin.schenck.taverna_compilation.exceptions.UnsupportedWorkflowException;
-import de.tuberlin.schenck.taverna_compilation.utils.Config;
-import de.tuberlin.schenck.taverna_compilation.utils.FileUtils;
+import de.tuberlin.schenck.taverna_to_hadoop.convert.translators.TemplateTranslator;
+import de.tuberlin.schenck.taverna_to_hadoop.exceptions.UnsupportedWorkflowException;
+import de.tuberlin.schenck.taverna_to_hadoop.utils.Config;
+import de.tuberlin.schenck.taverna_to_hadoop.utils.FileUtils;
 
 
 /**
