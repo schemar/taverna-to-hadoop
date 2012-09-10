@@ -1,0 +1,34 @@
+<%@ requires imports = "java.io.IOException,java.util.Iterator,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapred.MapReduceBase,org.apache.hadoop.mapred.OutputCollector,org.apache.hadoop.mapred.Reducer,org.apache.hadoop.mapred.Reporter,bsh.EvalError,bsh.Interpreter" %>
+	public static class BeanshellReduce extends MapReduceBase implements
+	Reducer<LongWritable, Text, LongWritable, Text> {
+		private Interpreter interpreter = new Interpreter();
+		private String script = <%= script %>;
+		private Text newValue = new Text();
+		
+		public void reduce(LongWritable key, Iterator<Text> values,
+			OutputCollector<LongWritable, Text> output, Reporter reporter)
+			throws IOException {
+			// Clear interpreter first
+			try {
+				interpreter.eval("clear();");
+			} catch (EvalError e) {
+				System.err.println("Could not clear() beanshell interpreter: " + e.getMessage());
+				e.printStackTrace();
+			}
+			
+			while(values.hasNext()) {
+				try {
+					interpreter.set("input", values.next().toString());
+					interpreter.eval(script);
+					
+					newValue.set(interpreter.get("output").toString());
+					
+					output.collect(key, newValue);
+				} catch (EvalError e) {
+					System.err.println("Could not evaluate beanshell: " + e.getMessage());
+					e.printStackTrace();
+				}
+			}
+		}
+	
+	}
