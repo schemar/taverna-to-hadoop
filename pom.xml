@@ -86,6 +86,32 @@
 			  </execution>
 			</executions>
   		</plugin>
+  		<plugin>
+	        <groupId>org.apache.maven.plugins</groupId>
+	        <artifactId>maven-shade-plugin</artifactId>
+	        <version>2.0</version>
+	        <executions>
+	            <execution>
+	                <phase>package</phase>
+	                <goals>
+	                    <goal>shade</goal>
+	                </goals>
+	                <configuration>
+	                    <artifactSet>
+	                        <excludes>
+	                            <exclude>junit:junit</exclude>
+	                            <exclude>org.mockito:mockito-all</exclude>
+	                        </excludes>
+	                    </artifactSet>
+	                    <transformers>
+	                        <transformer implementation="org.apache.maven.plugins.shade.resource.ComponentsXmlResourceTransformer" />
+	                    </transformers>
+	                    <minimizeJar>true</minimizeJar>
+	                    <finalName>${project.artifactId}-${project.version}-shade</finalName>
+	                </configuration>
+	            </execution>
+	        </executions>
+	    </plugin>
   	</plugins>
   </build>
   
