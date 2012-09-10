@@ -1,10 +1,24 @@
 # Taverna to Hadoop Compiler
 
+Compiles Taverna workflows to native Hadoop java source code.
+
 ## Introduction
+
+Taverna is an open source and domain-independent Workflow Management System – a suite of tools used to design and execute scientific workflows and aid in silico experimentation.
+In order to enable scientists to easily scale their workflows created with Taverna, this compiler automatically generates a java class file that can be executed on Hadoop.
+
+For more information see http://hadoop.apache.org/ or http://www.taverna.org.uk/
 
 ## Usage
 
-## Templates
+Use -h or --help as program argument to get the help output.
+
+## Extending the Compiler
+
+In the future it shall be possible to extend the compiler easily in order to incorporate new Taverna activities.
+The compiler uses a template per activity approach to translate individual activities.
+
+### Templates
 
 Templates are java source files with some additional placeholders.
 The engine will translate these files into pure java source files.
