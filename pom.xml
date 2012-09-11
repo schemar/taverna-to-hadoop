@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>de.tuberlin.schenck</groupId>
-  <artifactId>taverna-compilation</artifactId>
+  <artifactId>taverna-to-hadoop</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
