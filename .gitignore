@@ -6,5 +6,8 @@
 # Maven #
 target
 
+# JavaDoc #
+doc
+
 # Other #
 *~
