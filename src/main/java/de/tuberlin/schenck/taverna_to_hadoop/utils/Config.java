@@ -23,7 +23,7 @@ public class Config {
 	private static String hadoopClassName = "HadoopClass";
 	
 	/** The default package name for the resulting hadoop class. */
-	private static String hadoopPackageName = "de.tuberlin.schenck.taverna_compilation.generated";
+	private static String hadoopPackageName = "de.tuberlin.schenck.taverna_to_hadoop.generated";
 	
 	/** A counter that increases every time it is called */
 	private static int counter = 0;
