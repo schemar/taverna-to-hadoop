@@ -21,7 +21,8 @@ public class TavernaToHadoopConverter {
 	/** Path/file of the workflow that is to be translated. */
 	private String inputWorkflow;
 	/** Path/file of the resulting Hadoop jar. */
-	private String outputHadoop;
+	// TODO generate jar for use in hadoop
+	// private String outputHadoop;
 	
 	/**
 	 * Creates the converter.
@@ -32,7 +33,8 @@ public class TavernaToHadoopConverter {
 	 */
 	public TavernaToHadoopConverter(String inputWorkflow, String outputHadoop) {
 		this.inputWorkflow = inputWorkflow;
-		this.outputHadoop = outputHadoop;
+		// TODO generate jar for use in hadoop
+		// this.outputHadoop = outputHadoop;
 	}
 
 	/**
