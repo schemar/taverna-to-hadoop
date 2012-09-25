@@ -17,7 +17,6 @@ import uk.org.taverna.scufl2.api.profiles.ProcessorInputPortBinding;
 import uk.org.taverna.scufl2.api.profiles.ProcessorOutputPortBinding;
 import de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.IConfig;
 import de.tuberlin.schenck.taverna_to_hadoop.exceptions.UnsupportedWorkflowException;
-import de.tuberlin.schenck.taverna_to_hadoop.utils.Config;
 
 public class WorkflowManager {
 	/** The logger for this class. */
