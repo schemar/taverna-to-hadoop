@@ -55,8 +55,6 @@ public class TavernaToHadoopMain {
     	parseCommandLine(args);
 		resetLogger();
 		
-		Config.readTemplateMapping();
-		
     	TavernaToHadoopConverter converter = new TavernaToHadoopConverter(inputFilename, outputFilename);
     	converter.convert();
     	
@@ -119,14 +117,6 @@ public class TavernaToHadoopMain {
 		OptionBuilder.withLongOpt("templates");
 		Option templateLocation = OptionBuilder.create("t");
 		options.addOption(templateLocation);
-
-		// Templates path option
-		OptionBuilder.withArgName("filename");
-		OptionBuilder.hasArg();
-		OptionBuilder.withDescription("name of mapping file activity->template");
-		OptionBuilder.withLongOpt("mappingfile");
-		Option templateMappingLocation = OptionBuilder.create("m");
-		options.addOption(templateMappingLocation);
 		
 		// Hadoop class name option
 		OptionBuilder.withArgName("name");
@@ -214,14 +204,6 @@ public class TavernaToHadoopMain {
 				Config.setPathToTemplates(newPathToTemplates);
 				
 				logger.info("Path to templates: " + newPathToTemplates);
-			}
-			
-			// New mapping file?
-			String newMappingFile = cmd.getOptionValue("m");
-			if(newMappingFile != null) {
-				Config.setTemplateMappingFile(newMappingFile);
-				
-				logger.info("Mapping file: " + newMappingFile);
 			}
 			
 			// New hadoop class name?

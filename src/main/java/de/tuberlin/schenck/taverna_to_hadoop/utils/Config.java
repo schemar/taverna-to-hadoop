@@ -1,23 +1,11 @@
 package de.tuberlin.schenck.taverna_to_hadoop.utils;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.log4j.Logger;
-
-public class Config {
-	/** The logger for this class. */
-	private static Logger logger = Logger.getLogger(Config.class);
-	
+public class Config {	
 	/** The default path to the templates. */
 	private static String pathToTemplates = "resources/templates/";
-
-	/** The default mapping file from activities to templates. */
-	private static String templateMappingFile = "mapping";
 	
 	/** The default class name of the resulting hadoop class. */
 	private static String hadoopClassName = "HadoopClass";
@@ -75,14 +63,6 @@ public class Config {
 		return activityConfigsPackage;
 	}
 
-	public static String getTemplateMappingFile() {
-		return templateMappingFile;
-	}
-
-	public static void setTemplateMappingFile(String templateMappingFile) {
-		Config.templateMappingFile = templateMappingFile;
-	}
-
 	public static int getCount() {
 		return Config.counter++;
 	}
@@ -101,30 +81,5 @@ public class Config {
 
 	public static void setReducerMapping(Map<String, String> reducerMapping) {
 		Config.reducerMapping = reducerMapping;
-	}
-
-	public static void readTemplateMapping() {
-		logger.info("Reading file into mapping: " + templateMappingFile);
-				
-		BufferedReader reader = null;
-		
-		try {
-			reader = new BufferedReader(new FileReader(pathToTemplates + templateMappingFile));
-			
-			String line;
-			while((line = reader.readLine()) != null) {
-				String[] splits = line.split("\t");
-				mapperMapping.put(splits[0], splits[1]);
-				reducerMapping.put(splits[0], splits[2]);
-				
-				logger.debug("Read line: " + line);
-			}
-		} catch (FileNotFoundException e) {
-			logger.error("Could not read file " + templateMappingFile, e);
-		} catch (IOException e) {
-			logger.error("Could not read file " + templateMappingFile, e);
-		} finally {
-			try { reader.close(); } catch (Exception e) { /* ignore */ }
-		}
 	}
 }
