@@ -166,7 +166,7 @@ public class WorkflowManager {
 			nextReceiverPorts.addAll(processor.getInputPorts());
 		}
 		
-		// Next step in the workflow
+		// Next step in the workflow to reach all
 		for(ReceiverPort nextReceiverPort : nextReceiverPorts) {
 			getPreviousProcessors(result, scufl2tools, nextReceiverPort);
 		}
