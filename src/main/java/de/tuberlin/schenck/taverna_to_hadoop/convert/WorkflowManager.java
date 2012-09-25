@@ -36,6 +36,9 @@ public class WorkflowManager {
 	/** The workflow bundle read from disk. */
 	private WorkflowBundle workflowBundle;
 	
+	/** The activity list created from the workflow for the MapReduce class. */
+	List<ActivityConfig> activityList;
+	
 	/**
 	 * Create a manager and read the workflow from disk.
 	 * 
@@ -65,23 +68,9 @@ public class WorkflowManager {
 		} catch (IOException e) {
 			logger.error("Could not read " + input, e);
 		}
-	}
-	
-	/**
-	 * Create a template with the correct placeholders for this workflow.
-	 * <p>
-	 * To create that template, a given standard template gets new placeholders injected.
-	 * These placeholders reflect the setup of the workflow.
-	 * In order to work, the standard template needs to include the placeholders 
-	 * <code><%@ include mapreduce %></code> and <code><%@ include run %></code>.
-	 * 
-	 * @param inputTemplate the original template
-	 * @return the template
-	 */
-	public String createTemplateFromWorkflow(String inputTemplate) {
-		List<ActivityConfig> activityList = createListFromWorkflow();
-		logger.info("Resulting list: " + activityList);
-		return translate(inputTemplate, activityList);
+		
+		activityList = createListFromWorkflow();
+		logger.info("List from workflow: " + activityList);
 	}
 	
 	/**
@@ -113,6 +102,15 @@ public class WorkflowManager {
 		return result;
 	}
 
+	/**
+	 * Get all previous processors connected to the given {@link uk.org.taverna.scufl2.api.port.ReceiverPort} by a {@link uk.org.taverna.scufl2.api.core.DataLink}.
+	 * Adds all processors to the end of the list of {@link de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.ActivityConfig}s.
+	 * If it is already in the list, it deletes it and appends it.
+	 * 
+	 * @param result the final list of all {@link de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.ActivityConfig}s.
+	 * @param scufl2tools {@link uk.org.taverna.scufl2.api.common.Scufl2Tools} from the scufl 2 API
+	 * @param receiverPort the receiving port
+	 */
 	private void getPreviousProcessors(List<ActivityConfig> result,
 			Scufl2Tools scufl2tools, ReceiverPort receiverPort) {
 		// Remember which one to go through next
@@ -172,18 +170,14 @@ public class WorkflowManager {
 		}
 	}
 	
-	/**
-	 * Replaces placeholders contained in a template with their respective template imports.
-	 * 
-	 * @param template the template where to put the map and reduce calls
-	 * @param configurations a list of configurations for MapReduce calls
-	 * @return the template with the placeholder replaced by file inclusions
-	 */
-	public String translate(String template, List<ActivityConfig> configurations) {
-				
-		// TODO put map reduce classes into template
-		// FIXME might better suit a translator or a different name
-		
-		return template;
+	public String getMapReduceClasses() {
+		// FIXME get classes
+		return activityList.toString();
+	}
+	
+	public String getRuns() {
+		logger.info("Resulting list: " + activityList);
+		// FIXME get classes
+		return activityList.toString();
 	}
 }
