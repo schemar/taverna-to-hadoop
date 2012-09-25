@@ -106,7 +106,7 @@ public class WorkflowManager {
 	 */
 	public String createTemplateFromWorkflow(String inputTemplate) {
 		List<IConfig> activityList = createListFromWorkflow();
-		return translate(inputTemplate, Config.getConfigrations());
+		return translate(inputTemplate, activityList);
 	}
 	
 	/**
