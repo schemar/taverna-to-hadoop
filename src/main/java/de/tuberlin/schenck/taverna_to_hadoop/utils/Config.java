@@ -25,6 +25,9 @@ public class Config {
 	/** The default package name for the resulting hadoop class. */
 	private static String hadoopPackageName = "de.tuberlin.schenck.taverna_to_hadoop.generated";
 	
+	/** The default package name for activity configs. */
+	private static String activityConfigsPackage = "de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.";
+	
 	/** A counter that increases every time it is called */
 	private static int counter = 0;
 	
@@ -68,6 +71,10 @@ public class Config {
 		Config.hadoopPackageName = hadoopPackageName;
 	}
 	
+	public static String getActivityConfigsPackage() {
+		return activityConfigsPackage;
+	}
+
 	public static String getTemplateMappingFile() {
 		return templateMappingFile;
 	}
