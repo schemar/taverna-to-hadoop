@@ -143,6 +143,7 @@ public class WorkflowManager {
 			try {
 				logger.debug("Instanciating class: " + className);
 				
+				// Load class from name
 				Class<?> classForName = Class.forName(Config.getActivityConfigsPackage() + className);
 				Constructor<?> constructor = classForName.getConstructor(String.class);
 				activityConfig = (ActivityConfig) constructor.newInstance(configuration.getName());
