@@ -2,14 +2,22 @@ package de.tuberlin.schenck.taverna_to_hadoop.convert;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.container.WorkflowBundle;
+import uk.org.taverna.scufl2.api.core.DataLink;
 import uk.org.taverna.scufl2.api.io.ReaderException;
 import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
-import de.tuberlin.schenck.taverna_to_hadoop.convert.translators.WorkflowTranslator;
+import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
+import uk.org.taverna.scufl2.api.profiles.ProcessorBinding;
+import uk.org.taverna.scufl2.api.profiles.ProcessorInputPortBinding;
+import uk.org.taverna.scufl2.api.profiles.ProcessorOutputPortBinding;
+import de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.IConfig;
 import de.tuberlin.schenck.taverna_to_hadoop.exceptions.UnsupportedWorkflowException;
+import de.tuberlin.schenck.taverna_to_hadoop.utils.Config;
 
 public class WorkflowManager {
 	/** The logger for this class. */
@@ -71,11 +79,7 @@ public class WorkflowManager {
 		// Only one output port is supported at the moment
 		if(workflowBundle.getMainWorkflow().getOutputPorts().size() != 1)
 			throw new UnsupportedWorkflowException("Found more or fewer than one output port.");
-		
-		// Only one processor is supported at the moment
-		if(workflowBundle.getMainWorkflow().getProcessors().size() != 1)
-			throw new UnsupportedWorkflowException("Found more or fewer than one processor.");
-		
+				
 		// Only beanshell activities are allowed at the moment
 		if(!workflowBundle.getMainProfile().getActivities().first().getConfigurableType().toString().equals("http://ns.taverna.org.uk/2010/activity/beanshell"))
 			throw new UnsupportedWorkflowException("Found activity other than beanshell: " + workflowBundle.getMainProfile().getActivities().first().getConfigurableType());
@@ -101,7 +105,46 @@ public class WorkflowManager {
 	 * @return the template
 	 */
 	public String createTemplateFromWorkflow(String inputTemplate) {
-		WorkflowTranslator translator = new WorkflowTranslator(workflowBundle);
-		return translator.translate(inputTemplate);
+		List<IConfig> activityList = createListFromWorkflow();
+		return translate(inputTemplate, Config.getConfigrations());
+	}
+	
+	/**
+	 * Converts the workflow to a linear list of MapReduce {@link de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.IConfig}.
+	 * Starts at output port and recursively goes backwards until input port is reached.
+	 * Then reverses the order.
+	 */
+	private List<IConfig> createListFromWorkflow() {
+		List<IConfig> result = new ArrayList<IConfig>();
+		for(DataLink dataLink : workflowBundle.getMainWorkflow().getDataLinks()) {
+			logger.debug(dataLink.getReceivesFrom() + "->" + dataLink.getSendsTo());
+		}
+		for(ProcessorBinding binding : workflowBundle.getMainProfile().getProcessorBindings()) {
+			logger.debug(binding.getName());
+			for(ProcessorInputPortBinding inBinding : binding.getInputPortBindings()) {
+				logger.debug("\tinput: " + inBinding.getBoundActivityPort() + ", " + inBinding.getBoundProcessorPort());
+			}
+			for(ProcessorOutputPortBinding outBinding : binding.getOutputPortBindings()) {
+				logger.debug("\toutput: " + outBinding);
+			}
+		}
+		for(OutputWorkflowPort port : workflowBundle.getMainWorkflow().getOutputPorts()) {
+			
+		}
+		return result;
+	}
+	
+	/**
+	 * Replaces placeholders contained in a template with their respective template imports.
+	 * 
+	 * @param template the template where to put the map and reduce calls
+	 * @param configurations a list of configurations for MapReduce calls
+	 * @return the template with the placeholder replaced by file inclusions
+	 */
+	public String translate(String template, List<IConfig> configurations) {
+				
+		// TODO put map reduce classes into template
+		
+		return template;
 	}
 }
