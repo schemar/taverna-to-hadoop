@@ -2,7 +2,6 @@ package de.tuberlin.schenck.taverna_to_hadoop.convert;
 
 import org.apache.log4j.Logger;
 
-import de.tuberlin.schenck.taverna_to_hadoop.convert.translators.TemplateTranslator;
 import de.tuberlin.schenck.taverna_to_hadoop.exceptions.UnsupportedWorkflowException;
 import de.tuberlin.schenck.taverna_to_hadoop.utils.Config;
 import de.tuberlin.schenck.taverna_to_hadoop.utils.FileUtils;
@@ -54,10 +53,9 @@ public class TavernaToHadoopConverter {
 		
 		// Get input template from workflowManager
 		String template = FileUtils.readFileIntoString(Config.getPathToTemplates() + "hadoop-wrapper.jtemp");
-		template = workflowManager.createTemplateFromWorkflow(template);
 		
 		// Translate Template
 		TemplateTranslator translator = new TemplateTranslator(true);
-		template = translator.translate(template);
+		template = translator.translate(template, workflowManager);
 	}
 }

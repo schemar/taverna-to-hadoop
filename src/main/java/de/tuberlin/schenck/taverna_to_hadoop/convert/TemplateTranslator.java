@@ -69,12 +69,13 @@ public class TemplateTranslator {
 	 * Returns the java source code as a {@link String}.
 	 * 
 	 * @param file the reference to the template file, which shall be translated
+	 * @param workflowManager the workflow manager
 	 * @return the java source code translated from the referenced template file
 	 */
-	public String translate(File file) {
+	public String translate(File file, WorkflowManager workflowManager) {
 		logger.info("Translating " + file);
 		String template = FileUtils.readFileIntoString(file);
-		return translate(template);
+		return translate(template, workflowManager);
 	}
 	
 	/**
@@ -83,11 +84,12 @@ public class TemplateTranslator {
 	 * Returns the java source code as a {@link String}.
 	 * 
 	 * @param template the template as a <code>String</code>, which shall be translated
+	 * @param workflowManager the workflow manager
 	 * @return the java source code translated from the referenced template file
 	 */
-	public String translate(String template) {
+	public String translate(String template, WorkflowManager workflowManager) {
 		// Read, translate, write (if root element)
-		template = replacePlaceholders(template);
+		template = replacePlaceholders(template, workflowManager);
 		// Cannot replace imports beforehand because of possible inclusion of additional imports from recursively translated templates
 		template = replaceImports(template);
 		
@@ -104,9 +106,10 @@ public class TemplateTranslator {
 	 * See <code>README.md</code> for more information on templates.
 	 * 
 	 * @param template the template as a <code>String</code>
+	 * @param workflowManager the workflow manager
 	 * @return a <code>String</code> with the placeholders replaced
 	 */
-	protected String replacePlaceholders(String template) {
+	protected String replacePlaceholders(String template, WorkflowManager workflowManager) {
 		placeholderMatcher = placeholderPattern.matcher(template);
 
 		String placeholder;
@@ -115,7 +118,7 @@ public class TemplateTranslator {
 			logger.debug("Found placeholder that contains: " + placeholder);
 						
 			// Find kind of placeholder
-			template = handlePlaceholder(template, placeholder);
+			template = handlePlaceholder(template, placeholder, workflowManager);
 		}
 		
 		return template;
@@ -126,17 +129,18 @@ public class TemplateTranslator {
 	 * 
 	 * @param template the template that contains the placeholder
 	 * @param placeholder the placeholder what was found
+	 * @param workflowManager the workflow manager
 	 * @return the new template with the placeholder replaced
 	 */
-	protected String handlePlaceholder(String template, String placeholder) {
+	protected String handlePlaceholder(String template, String placeholder, WorkflowManager workflowManager) {
 		// Remove all white spaces to make parsing easier
 		String placeholderStripped = placeholder.replaceAll("\\s", "");
 		String inQuotes;
 		
 		if(placeholderStripped.startsWith("<%@includemapreduce")) {
-			
+			template = template.replace(placeholder, workflowManager.getMapReduceClasses());
 		} else if(placeholderStripped.startsWith("<%@includerun")) {
-			
+			template = template.replace(placeholder, workflowManager.getRuns());			
 		} else if(placeholderStripped.startsWith("<%@includefile")) {
 			inQuotesMatcher = inQuotesPattern.matcher(placeholderStripped);
 			if(inQuotesMatcher.find()) {
