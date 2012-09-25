@@ -133,7 +133,11 @@ public class TemplateTranslator {
 		String placeholderStripped = placeholder.replaceAll("\\s", "");
 		String inQuotes;
 		
-		if(placeholderStripped.startsWith("<%@includefile")) {
+		if(placeholderStripped.startsWith("<%@includemapreduce")) {
+			
+		} else if(placeholderStripped.startsWith("<%@includerun")) {
+			
+		} else if(placeholderStripped.startsWith("<%@includefile")) {
 			inQuotesMatcher = inQuotesPattern.matcher(placeholderStripped);
 			if(inQuotesMatcher.find()) {
 				inQuotes = inQuotesMatcher.group(1);
@@ -207,14 +211,5 @@ public class TemplateTranslator {
 			}
 		}
 		return template;
-	}
-
-	/**
-	 * Getter for the imports
-	 * 
-	 * @return the imports
-	 */
-	public Set<String> getImports() {
-		return imports;
 	}
 }
