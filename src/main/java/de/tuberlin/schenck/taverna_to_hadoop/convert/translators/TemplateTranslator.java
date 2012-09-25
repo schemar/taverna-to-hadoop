@@ -68,7 +68,7 @@ public class TemplateTranslator {
 	 * Also translates all included template files recursively.
 	 * Returns the java source code as a {@link String}.
 	 * 
-	 * @param template the reference to the template file, which shall be translated
+	 * @param file the reference to the template file, which shall be translated
 	 * @return the java source code translated from the referenced template file
 	 */
 	public String translate(File file) {
