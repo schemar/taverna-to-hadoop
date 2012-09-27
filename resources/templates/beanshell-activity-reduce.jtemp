@@ -18,10 +18,10 @@
 			
 			while(values.hasNext()) {
 				try {
-					interpreter.set("input", values.next().toString());
+					interpreter.set(<%= inputPort %>, values.next().toString());
 					interpreter.eval(script);
 					
-					newValue.set(interpreter.get("output").toString());
+					newValue.set(interpreter.get(<%= outputPort %>).toString());
 					
 					output.collect(key, newValue);
 				} catch (EvalError e) {

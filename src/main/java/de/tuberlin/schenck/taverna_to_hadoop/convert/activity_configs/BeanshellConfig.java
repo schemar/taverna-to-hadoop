@@ -82,6 +82,10 @@ public class BeanshellConfig extends ActivityConfig {
 				result = result.replace(placeholder, getName());
 			} else if(placeholderStripped.equals("<%=script%>")) {
 				result = result.replace(placeholder, "\"" + script + "\"");
+			} else if(placeholderStripped.equals("<%=inputPort%>")) {
+				result = result.replace(placeholder, "\"" + getInputPort() + "\"");
+			} else if(placeholderStripped.equals("<%=outputPort%>")) {
+				result = result.replace(placeholder, "\"" + getOutputPort() + "\"");
 			} else if(placeholderStripped.equals("<%=inputFormat%>")) {
 				result = result.replace(placeholder, getInputFormat());
 			} else if(placeholderStripped.equals("<%=outputFormat%>")) {
