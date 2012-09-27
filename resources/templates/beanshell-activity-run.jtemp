@@ -15,4 +15,3 @@
 		FileOutputFormat.setOutputPath(jobConf, new Path(<%= outputPath %>));
 		
 		JobClient.runJob(jobConf);
-		return 0;
