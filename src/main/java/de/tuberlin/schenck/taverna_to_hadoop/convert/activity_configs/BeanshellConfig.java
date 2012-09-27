@@ -1,5 +1,8 @@
 package de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 
 import uk.org.taverna.scufl2.api.configurations.Configuration;
@@ -31,11 +34,27 @@ public class BeanshellConfig extends ActivityConfig {
 
 	@Override
 	public String getMapReduce() {
+		List<String> templates = new ArrayList<String>(2);
+		templates.add("identity-map.jtemp");
+		templates.add("beanshell-activity-reduce.jtemp");
+		
+		return removePlaceholdersFromTemplate(templates);
+	}
+
+	/**
+	 * Reads all given templates, concatenates them and processes their activity specific placeholders.
+	 * 
+	 * @param templateNames a list of all templates that shall be read and processed
+	 * @return the template with the activity specific placeholders replaced
+	 */
+	private String removePlaceholdersFromTemplate(List<String> templateNames) {
 		// Read the templates
 		StringBuilder resultBuilder = new StringBuilder();
-		resultBuilder.append(FileUtils.readFileIntoString(Config.getPathToTemplates() + "identity-map.jtemp"));
-		resultBuilder.append("\n");
-		resultBuilder.append(FileUtils.readFileIntoString(Config.getPathToTemplates() + "beanshell-activity-reduce.jtemp"));
+		
+		for(String templateName : templateNames) {
+			resultBuilder.append(FileUtils.readFileIntoString(Config.getPathToTemplates() + templateName));
+			resultBuilder.append("\n");
+		}
 		
 		String result = resultBuilder.toString();
 		// Replace variables
@@ -62,10 +81,11 @@ public class BeanshellConfig extends ActivityConfig {
 	}
 
 	@Override
-	public String getRun(String inputPath, String inputFormat, String outputPath,
-			String outputFormat) {
-		// TODO Auto-generated method stub
-		return null;
+	public String getRun() {
+		List<String> templates = new ArrayList<String>(1);
+		templates.add("beanshell-activity-run.jtemp");
+		
+		return removePlaceholdersFromTemplate(templates);
 	}
 
 	public String getScript() {
