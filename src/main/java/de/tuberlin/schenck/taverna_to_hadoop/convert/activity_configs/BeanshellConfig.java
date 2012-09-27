@@ -56,6 +56,7 @@ public class BeanshellConfig extends ActivityConfig {
 	 * @return the template with the activity specific placeholders replaced
 	 */
 	private String removePlaceholdersFromTemplate(List<String> templateNames) {
+		logger.debug("Replacing placeholders in: " + templateNames);
 		// Read the templates
 		StringBuilder resultBuilder = new StringBuilder();
 		
