@@ -1,4 +1,10 @@
 package de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import uk.org.taverna.scufl2.api.configurations.Configuration;
+
 /**
  * Configurations interface for Taverna activities.
  * 
@@ -6,7 +12,20 @@ package de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs;
  *
  */
 public abstract class ActivityConfig {
+	/** The name of the configuration. */
 	private String name;
+	
+	/** The pattern for general placeholders. */
+	protected final Pattern placeholderPattern = Pattern.compile("<%(.*?)%>");
+
+	/** The matcher for general placeholders. */
+	protected Matcher placeholderMatcher;
+
+	/** The pattern for placeholders in quotes. */
+	protected Pattern inQuotesPattern = Pattern.compile("\"(.*?)\"");
+
+	/** The matcher for placeholders in quotes. */
+	protected Matcher inQuotesMatcher;
 	
 	/**
 	 * Constructs an {@link de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.ActivityConfig}.
@@ -32,10 +51,22 @@ public abstract class ActivityConfig {
 	
 	/**
 	 * The java run method source code for the Hadoop class for this activity.
+	 * 
+	 * @param inputPath the path to the input file
+	 * @param inputType the name of the reader class
+	 * @param outputPath the path to the output file
+	 * @param outputType the name of the writer class
 	 * @return the java source code
 	 */
-	public abstract String getRun();
+	public abstract String getRun(String inputPath, String inputType, String outputPath, String outputType);
 
+	/**
+	 * Lets this activity config get the individually required data from the Taverna configuration.
+	 * 
+	 * @param configuration the Taverna configuration
+	 */
+	public abstract void fetchDataFromTavernaConfig(Configuration configuration);
+	
 	@Override
 	public String toString() {
 		return name;
