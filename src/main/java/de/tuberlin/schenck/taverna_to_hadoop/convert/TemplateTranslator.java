@@ -150,18 +150,6 @@ public class TemplateTranslator {
 			} else {
 				logger.warn("Could not find template from: " + placeholder);
 			}
-		} else if(placeholderStripped.startsWith("<%@requiresimports")) {
-			inQuotesMatcher = inQuotesPattern.matcher(placeholderStripped);
-			if(inQuotesMatcher.find()) {
-				inQuotes = inQuotesMatcher.group(1);
-				logger.debug("Adding includes: " + inQuotes);
-				imports.addAll(Arrays.asList(inQuotes.split(",")));
-			} else {
-				logger.warn("Did not find the imports: " + placeholder);
-			}
-			
-			// Remove placeholder
-			template = template.replaceAll(placeholder, "");
 		} else if(placeholderStripped.startsWith("<%=")) {
 			// Strip opening and closing of tag
 			placeholderStripped = placeholderStripped.substring(3, placeholderStripped.length() - 2);
@@ -183,7 +171,44 @@ public class TemplateTranslator {
 		return template;
 	}
 
+	/**
+	 * Handles all required imports for the final class.
+	 * First, it reads all required imports from the template and generates a <code>Set</code>.
+	 * Then it puts all imports at the specified place.
+	 * 
+	 * @param template the template
+	 * @return the template with the imports resolved
+	 */
 	protected String replaceImports(String template) {
+		String placeholder;
+		String placeholderStripped;
+		String inQuotes;
+		
+		// Get all imports
+		placeholderMatcher = placeholderPattern.matcher(template);
+		
+		while(placeholderMatcher.find()) {
+			placeholder = placeholderMatcher.group(0);
+			logger.debug("Found placeholder that contains: " + placeholder);
+			
+			// Remove all white spaces to make parsing easier
+			placeholderStripped = placeholder.replaceAll("\\s", "");
+			
+			if(placeholderStripped.startsWith("<%@requiresimports")) {
+				inQuotesMatcher = inQuotesPattern.matcher(placeholderStripped);
+				if(inQuotesMatcher.find()) {
+					inQuotes = inQuotesMatcher.group(1);
+					logger.debug("Adding includes: " + inQuotes);
+					imports.addAll(Arrays.asList(inQuotes.split(",")));
+				} else {
+					logger.warn("Did not find the imports: " + placeholder);
+				}
+				
+				// Remove placeholder
+				template = template.replaceAll(placeholder, "");
+			}
+		}
+		
 		// Move imports into Array to sort them alphabetically
 		List<String> importsList = new ArrayList<String>(imports.size());
 		importsList.addAll(imports);
@@ -191,8 +216,6 @@ public class TemplateTranslator {
 		
 		placeholderMatcher = placeholderPattern.matcher(template);
 		
-		String placeholder;
-		String placeholderStripped;
 		while(placeholderMatcher.find()) {
 			placeholder = placeholderMatcher.group(0);
 			logger.debug("Found placeholder that contains: " + placeholder);
