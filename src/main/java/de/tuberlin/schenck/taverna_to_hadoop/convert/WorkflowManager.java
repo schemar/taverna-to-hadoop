@@ -74,7 +74,7 @@ public class WorkflowManager {
 	}
 	
 	/**
-	 * Converts the workflow to a linear list of MapReduce {@link de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.IConfig}.
+	 * Converts the workflow to a linear list of MapReduce {@link de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs.ActivityConfig}.
 	 * Starts at output port and recursively goes backwards until input port is reached.
 	 * Then reverses the order.
 	 */
@@ -145,6 +145,9 @@ public class WorkflowManager {
 				Class<?> classForName = Class.forName(Config.getActivityConfigsPackage() + className);
 				Constructor<?> constructor = classForName.getConstructor(String.class);
 				activityConfig = (ActivityConfig) constructor.newInstance(configuration.getName());
+				
+				// Transfer data from Taverna
+				activityConfig.fetchDataFromTavernaConfig(configuration);
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | 
 					NoSuchMethodException | SecurityException | IllegalArgumentException | 
 					InvocationTargetException e) {
@@ -170,11 +173,16 @@ public class WorkflowManager {
 		}
 	}
 	
+	/**
+	 * Get the String for the template for all map and reduce classes from the workflow.
+	 *  
+	 * @return the java source code for all map and reduce classes
+	 */
 	public String getMapReduceClasses() {
 		StringBuilder resultBuilder = new StringBuilder();
 		
 		for(ActivityConfig activityConfig : activityList) {
-			activityConfig.getMapReduce();
+			resultBuilder.append(activityConfig.getMapReduce());
 			resultBuilder.append("\n");
 		}
 		
@@ -183,9 +191,14 @@ public class WorkflowManager {
 		return result;
 	}
 	
+	/**
+	 * Get the String for the template for all run methods from the workflow.
+	 *  
+	 * @return the java source code for all the run methods
+	 */
 	public String getRuns() {
 		logger.info("Resulting list: " + activityList);
 		// FIXME get classes
-		return activityList.toString();
+		return "";
 	}
 }
