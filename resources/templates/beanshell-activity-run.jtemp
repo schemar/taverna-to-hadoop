@@ -1,18 +1,18 @@
 <%@ requires imports = "org.apache.hadoop.fs.Path,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapred.FileInputFormat,org.apache.hadoop.mapred.FileOutputFormat,org.apache.hadoop.mapred.JobClient,org.apache.hadoop.mapred.JobConf,org.apache.hadoop.mapred.TextInputFormat,org.apache.hadoop.mapred.TextOutputFormat" %>	
 		JobConf jobConf = new JobConf();
 		
-		jobConf.setInputFormat(TextInputFormat.class);
-		jobConf.setOutputFormat(TextOutputFormat.class);
+		jobConf.setInputFormat(<%= inputFormat %>.class);
+		jobConf.setOutputFormat(<%= outputFormat %>.class);
 		jobConf.setOutputKeyClass(LongWritable.class);
 		jobConf.setOutputValueClass(Text.class);
 		
-		jobConf.setMapperClass(IdentityMap.class);
-		jobConf.setReducerClass(BeanshellReduce.class);
+		jobConf.setMapperClass(<%= configName %>IdentityMap.class);
+		jobConf.setReducerClass(<%= configName %>BeanshellReduce.class);
 		
 		jobConf.setJarByClass(<%= hadoopClassName %>.class);
 		
-		FileInputFormat.setInputPaths(jobConf, args[0]);
-		FileOutputFormat.setOutputPath(jobConf, new Path(args[1]));
+		FileInputFormat.setInputPaths(jobConf, <%= inputPath %>);
+		FileOutputFormat.setOutputPath(jobConf, new Path(<%= outputPath %>));
 		
 		JobClient.runJob(jobConf);
 		return 0;
