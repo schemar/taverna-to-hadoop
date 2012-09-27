@@ -15,6 +15,19 @@ public abstract class ActivityConfig {
 	/** The name of the configuration. */
 	private String name;
 	
+	/** The input path. */
+	private String inputPath;
+	
+	/** The input format class. */
+	private String inputFormat;
+	
+	/** The output path. */
+	private String outputPath;
+	
+	/** The output format class. */
+	private String outputFormat;
+	
+	
 	/** The pattern for general placeholders. */
 	protected final Pattern placeholderPattern = Pattern.compile("<%(.*?)%>");
 
@@ -82,4 +95,61 @@ public abstract class ActivityConfig {
 		
 		return false;
 	}
+
+	/**
+	 * @return the inputPath
+	 */
+	public String getInputPath() {
+		return inputPath;
+	}
+
+	/**
+	 * @param inputPath the inputPath to set
+	 */
+	public void setInputPath(String inputPath) {
+		this.inputPath = inputPath;
+	}
+
+	/**
+	 * @return the inputFormat
+	 */
+	public String getInputFormat() {
+		return inputFormat;
+	}
+
+	/**
+	 * @param inputFormat the inputFormat to set
+	 */
+	public void setInputFormat(String inputFormat) {
+		this.inputFormat = inputFormat;
+	}
+
+	/**
+	 * @return the outputPath
+	 */
+	public String getOutputPath() {
+		return outputPath;
+	}
+
+	/**
+	 * @param outputPath the outputPath to set
+	 */
+	public void setOutputPath(String outputPath) {
+		this.outputPath = outputPath;
+	}
+
+	/**
+	 * @return the outputFormat
+	 */
+	public String getOutputFormat() {
+		return outputFormat;
+	}
+
+	/**
+	 * @param outputFormat the outputFormat to set
+	 */
+	public void setOutputFormat(String outputFormat) {
+		this.outputFormat = outputFormat;
+	}
+	
 }
