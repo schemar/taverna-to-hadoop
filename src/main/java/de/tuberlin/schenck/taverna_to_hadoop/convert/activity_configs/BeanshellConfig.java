@@ -23,7 +23,7 @@ public class BeanshellConfig extends ActivityConfig {
 	}
 
 	@Override
-	public void fetchDataFromTavernaConfig(Configuration configuration) {
+	public void fetchActivitySpecificDataFromTavernaConfig(Configuration configuration) {
 		script = "";
 		try {
 			script = configuration.getPropertyResource().getPropertyAsString(BeanshellActivityParser.ACTIVITY_URI.resolve("#script"));

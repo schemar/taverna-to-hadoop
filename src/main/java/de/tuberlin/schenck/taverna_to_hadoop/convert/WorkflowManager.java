@@ -147,7 +147,11 @@ public class WorkflowManager {
 				activityConfig = (ActivityConfig) constructor.newInstance(configuration.getName());
 				
 				// Transfer data from Taverna
-				activityConfig.fetchDataFromTavernaConfig(configuration);
+				activityConfig.fetchActivitySpecificDataFromTavernaConfig(configuration);
+				
+				// TODO multiple ports
+				activityConfig.setOutputPort(processor.getOutputPorts().first().getName());
+				activityConfig.setInputPort(processor.getInputPorts().first().getName());
 			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | 
 					NoSuchMethodException | SecurityException | IllegalArgumentException | 
 					InvocationTargetException e) {
@@ -197,8 +201,25 @@ public class WorkflowManager {
 	 * @return the java source code for all the run methods
 	 */
 	public String getRuns() {
-		logger.info("Resulting list: " + activityList);
-		// FIXME get classes
-		return "";
+		StringBuilder resultBuilder = new StringBuilder();
+		
+		String inputPath = "args[0]";
+		String intermediatePath;
+		for(ActivityConfig activityConfig : activityList) {
+			intermediatePath = "\"" + activityConfig.getName() + "_" + activityConfig.getOutputPort() + "\"";
+					
+			activityConfig.setInputPath(inputPath);
+			activityConfig.setOutputPath(intermediatePath);
+			
+			activityConfig.setInputFormat("TextInputFormat");
+			activityConfig.setOutputFormat("TextOutputFormat");
+			
+			resultBuilder.append(activityConfig.getRun());
+			resultBuilder.append("\n");
+			
+			inputPath = intermediatePath;
+		}
+		
+		return resultBuilder.toString();
 	}
 }

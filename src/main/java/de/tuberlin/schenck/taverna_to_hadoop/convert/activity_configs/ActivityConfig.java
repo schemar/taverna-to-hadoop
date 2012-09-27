@@ -27,6 +27,13 @@ public abstract class ActivityConfig {
 	/** The output format class. */
 	private String outputFormat;
 	
+
+	/** The input port. */
+	private String inputPort;
+	
+	/** The output port. */
+	private String outputPort;
+	
 	
 	/** The pattern for general placeholders. */
 	protected final Pattern placeholderPattern = Pattern.compile("<%(.*?)%>");
@@ -74,7 +81,7 @@ public abstract class ActivityConfig {
 	 * 
 	 * @param configuration the Taverna configuration
 	 */
-	public abstract void fetchDataFromTavernaConfig(Configuration configuration);
+	public abstract void fetchActivitySpecificDataFromTavernaConfig(Configuration configuration);
 	
 	@Override
 	public String toString() {
@@ -146,6 +153,34 @@ public abstract class ActivityConfig {
 	 */
 	public void setOutputFormat(String outputFormat) {
 		this.outputFormat = outputFormat;
+	}
+
+	/**
+	 * @return the inputPort
+	 */
+	public String getInputPort() {
+		return inputPort;
+	}
+
+	/**
+	 * @param inputPort the inputPort to set
+	 */
+	public void setInputPort(String inputPort) {
+		this.inputPort = inputPort;
+	}
+
+	/**
+	 * @return the outputPort
+	 */
+	public String getOutputPort() {
+		return outputPort;
+	}
+
+	/**
+	 * @param outputPort the outputPort to set
+	 */
+	public void setOutputPort(String outputPort) {
+		this.outputPort = outputPort;
 	}
 	
 }
