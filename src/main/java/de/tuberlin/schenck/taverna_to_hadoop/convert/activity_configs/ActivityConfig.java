@@ -53,9 +53,9 @@ public abstract class ActivityConfig {
 	 * The java run method source code for the Hadoop class for this activity.
 	 * 
 	 * @param inputPath the path to the input file
-	 * @param inputType the name of the reader class
+	 * @param inputFormat the name of the reader class
 	 * @param outputPath the path to the output file
-	 * @param outputType the name of the writer class
+	 * @param outputFormat the name of the writer class
 	 * @return the java source code
 	 */
 	public abstract String getRun(String inputPath, String inputFormat, String outputPath, String outputFormat);
