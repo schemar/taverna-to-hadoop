@@ -11,6 +11,8 @@ public class <%= hadoopClassName %> extends Configured implements Tool {
 
 	public int run(String[] args) throws Exception {
 		<%@ include run %>
+		
+		return 0;
 	}
 
 	/**
