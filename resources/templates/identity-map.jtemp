@@ -1,6 +1,6 @@
 <%@ requires imports = "java.io.IOException,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapred.MapReduceBase,org.apache.hadoop.mapred.Mapper,org.apache.hadoop.mapred.OutputCollector,org.apache.hadoop.mapred.Reporter" %>
 
-public static class IdentityMap extends MapReduceBase implements Mapper<LongWritable, Text, LongWritable, Text> {
+public static class <%= configName %>IdentityMap extends MapReduceBase implements Mapper<LongWritable, Text, LongWritable, Text> {
 	public void map(LongWritable key, Text value, OutputCollector<LongWritable, Text> output, Reporter reporter) throws IOException {
 		output.collect(key, value);
 	}

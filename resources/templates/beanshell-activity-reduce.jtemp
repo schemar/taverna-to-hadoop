@@ -1,5 +1,5 @@
 <%@ requires imports = "java.io.IOException,java.util.Iterator,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapred.MapReduceBase,org.apache.hadoop.mapred.OutputCollector,org.apache.hadoop.mapred.Reducer,org.apache.hadoop.mapred.Reporter,bsh.EvalError,bsh.Interpreter" %>
-	public static class BeanshellReduce extends MapReduceBase implements
+	public static class <%= configName %>BeanshellReduce extends MapReduceBase implements
 	Reducer<LongWritable, Text, LongWritable, Text> {
 		private Interpreter interpreter = new Interpreter();
 		private String script = <%= script %>;
