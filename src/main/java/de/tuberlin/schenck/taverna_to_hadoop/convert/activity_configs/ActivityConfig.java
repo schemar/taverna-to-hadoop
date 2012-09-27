@@ -5,7 +5,7 @@ package de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs;
  * @author schenck
  *
  */
-public class ActivityConfig {
+public abstract class ActivityConfig {
 	private String name;
 	
 	/**
@@ -23,6 +23,18 @@ public class ActivityConfig {
 	public String getName() {
 		return name;
 	}
+	
+	/**
+	 * The java MapReduce source code for the Hadoop class for this activity.
+	 * @return the java source code
+	 */
+	public abstract String getMapReduce();
+	
+	/**
+	 * The java run method source code for the Hadoop class for this activity.
+	 * @return the java source code
+	 */
+	public abstract String getRun();
 
 	@Override
 	public String toString() {

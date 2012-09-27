@@ -171,8 +171,16 @@ public class WorkflowManager {
 	}
 	
 	public String getMapReduceClasses() {
-		// FIXME get classes
-		return activityList.toString();
+		StringBuilder resultBuilder = new StringBuilder();
+		
+		for(ActivityConfig activityConfig : activityList) {
+			activityConfig.getMapReduce();
+			resultBuilder.append("\n");
+		}
+		
+		String result = resultBuilder.toString();
+		logger.debug("Map and reduce classes: " + result);
+		return result;
 	}
 	
 	public String getRuns() {

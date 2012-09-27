@@ -4,4 +4,16 @@ public class BeanshellConfig extends ActivityConfig {
 	public BeanshellConfig(String name) {
 		super(name);
 	}
+
+	@Override
+	public String getMapReduce() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getRun() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
