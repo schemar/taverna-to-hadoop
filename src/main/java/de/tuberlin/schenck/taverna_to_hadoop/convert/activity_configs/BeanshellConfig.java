@@ -62,8 +62,8 @@ public class BeanshellConfig extends ActivityConfig {
 	}
 
 	@Override
-	public String getRun(String inputPath, String inputType, String outputPath,
-			String outputType) {
+	public String getRun(String inputPath, String inputFormat, String outputPath,
+			String outputFormat) {
 		// TODO Auto-generated method stub
 		return null;
 	}

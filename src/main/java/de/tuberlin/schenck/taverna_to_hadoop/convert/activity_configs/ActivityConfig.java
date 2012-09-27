@@ -58,7 +58,7 @@ public abstract class ActivityConfig {
 	 * @param outputType the name of the writer class
 	 * @return the java source code
 	 */
-	public abstract String getRun(String inputPath, String inputType, String outputPath, String outputType);
+	public abstract String getRun(String inputPath, String inputFormat, String outputPath, String outputFormat);
 
 	/**
 	 * Lets this activity config get the individually required data from the Taverna configuration.
