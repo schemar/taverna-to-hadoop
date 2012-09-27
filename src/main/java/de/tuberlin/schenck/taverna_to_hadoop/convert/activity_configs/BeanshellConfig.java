@@ -41,6 +41,14 @@ public class BeanshellConfig extends ActivityConfig {
 		return removePlaceholdersFromTemplate(templates);
 	}
 
+	@Override
+	public String getRun() {
+		List<String> templates = new ArrayList<String>(1);
+		templates.add("beanshell-activity-run.jtemp");
+		
+		return removePlaceholdersFromTemplate(templates);
+	}
+
 	/**
 	 * Reads all given templates, concatenates them and processes their activity specific placeholders.
 	 * 
@@ -73,19 +81,19 @@ public class BeanshellConfig extends ActivityConfig {
 				result = result.replace(placeholder, getName());
 			} else if(placeholderStripped.equals("<%=script%>")) {
 				result = result.replace(placeholder, "\"" + script + "\"");
+			} else if(placeholderStripped.equals("<%=inputFormat%>")) {
+				result = result.replace(placeholder, getInputFormat());
+			} else if(placeholderStripped.equals("<%=outputFormat%>")) {
+				result = result.replace(placeholder, getOutputFormat());
+			} else if(placeholderStripped.equals("<%=inputPath%>")) {
+				result = result.replace(placeholder, getInputPath());
+			} else if(placeholderStripped.equals("<%=outputPath%>")) {
+				result = result.replace(placeholder, getOutputPath());
 			}
 		}
 		
 		logger.debug("Beanshell template: " + result);
 		return result;
-	}
-
-	@Override
-	public String getRun() {
-		List<String> templates = new ArrayList<String>(1);
-		templates.add("beanshell-activity-run.jtemp");
-		
-		return removePlaceholdersFromTemplate(templates);
 	}
 
 	public String getScript() {
