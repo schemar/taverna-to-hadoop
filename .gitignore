@@ -6,8 +6,9 @@
 # Maven #
 target
 
-# JavaDoc #
+# JavaDoc and UML #
 doc
+diagrams
 
 # Other #
 *~
