@@ -48,7 +48,7 @@ public class TavernaToHadoopMain {
 	/**
 	 * Runs the conversion program.
 	 * 
-	 * @param args command line arguments
+	 * @param args command line arguments 
 	 */
     public static void main( String[] args ) {
 		resetLogger();
@@ -57,7 +57,7 @@ public class TavernaToHadoopMain {
 		
     	TavernaToHadoopConverter converter = new TavernaToHadoopConverter(inputFilename, outputFilename);
     	converter.convert();
-    	
+
     	logger.info("Done");
     }
 
