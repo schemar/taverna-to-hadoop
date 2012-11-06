@@ -152,9 +152,26 @@ public class WorkflowManager {
 				// TODO multiple ports
 				activityConfig.setOutputPort(processor.getOutputPorts().first().getName());
 				activityConfig.setInputPort(processor.getInputPorts().first().getName());
-			} catch (InstantiationException | IllegalAccessException | ClassNotFoundException | 
-					NoSuchMethodException | SecurityException | IllegalArgumentException | 
-					InvocationTargetException e) {
+			} catch (InstantiationException e) {
+				logger.error("Unsupported workflow.", new UnsupportedWorkflowException());
+				logger.error("Could not instanciate class " + className + ".", e);
+			} catch (IllegalAccessException e) {
+				logger.error("Unsupported workflow.", new UnsupportedWorkflowException());
+				logger.error("Could not instanciate class " + className + ".", e);
+			} catch (ClassNotFoundException e) {
+				logger.error("Unsupported workflow.", new UnsupportedWorkflowException());
+				logger.error("Could not instanciate class " + className + ".", e);
+			} catch (NoSuchMethodException e) {
+				logger.error("Unsupported workflow.", new UnsupportedWorkflowException());
+				logger.error("Could not instanciate class " + className + ".", e);
+			} catch (SecurityException e) {
+				logger.error("Unsupported workflow.", new UnsupportedWorkflowException());
+				logger.error("Could not instanciate class " + className + ".", e);
+			} catch (IllegalArgumentException e) {
+				logger.error("Unsupported workflow.", new UnsupportedWorkflowException());
+				logger.error("Could not instanciate class " + className + ".", e);
+			} catch (InvocationTargetException e) {
+				logger.error("Unsupported workflow.", new UnsupportedWorkflowException());
 				logger.error("Could not instanciate class " + className + ".", e);
 			}
 			
