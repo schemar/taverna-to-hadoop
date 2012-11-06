@@ -1,10 +1,11 @@
-<%@ requires imports = "org.apache.hadoop.fs.Path,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapred.FileInputFormat,org.apache.hadoop.mapred.FileOutputFormat,org.apache.hadoop.mapred.JobClient,org.apache.hadoop.mapred.JobConf,org.apache.hadoop.mapred.TextInputFormat,org.apache.hadoop.mapred.TextOutputFormat" %>	
-		JobConf jobConf<%= configName %> = new JobConf();
+<%@ requires imports = "org.apache.hadoop.fs.Path,org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.lib.input.FileInputFormat,org.apache.hadoop.mapreduce.lib.output.FileOutputFormat,org.apache.hadoop.mapreduce.lib.input.TextInputFormat,org.apache.hadoop.mapreduce.lib.output.TextOutputFormat,org.apache.hadoop.mapreduce.Job,org.apache.hadoop.conf.Configuration" %>
+		Configuration conf<%= configName %> = getConf();
+		Job jobConf<%= configName %> = new Job(conf<%= configName %>, "<%= configName %>");
 		
-		jobConf<%= configName %>.setInputFormat(<%= inputFormat %>.class);
-		jobConf<%= configName %>.setOutputFormat(<%= outputFormat %>.class);
-		jobConf<%= configName %>.setOutputKeyClass(LongWritable.class);
-		jobConf<%= configName %>.setOutputValueClass(Text.class);
+		jobConf<%= configName %>.setInputFormatClass(<%= inputFormat %>.class);
+		jobConf<%= configName %>.setOutputFormatClass(<%= outputFormat %>.class);
+		jobConf<%= configName %>.setOutputKeyClass(Text.class);
+		jobConf<%= configName %>.setOutputValueClass(NullWritable.class);
 		
 		jobConf<%= configName %>.setMapperClass(<%= configName %>IdentityMap.class);
 		jobConf<%= configName %>.setReducerClass(<%= configName %>BeanshellReduce.class);
@@ -14,4 +15,4 @@
 		FileInputFormat.setInputPaths(jobConf<%= configName %>, <%= inputPath %>);
 		FileOutputFormat.setOutputPath(jobConf<%= configName %>, new Path(<%= outputPath %>));
 		
-		JobClient.runJob(jobConf<%= configName %>);
+		jobConf<%= configName %>.waitForCompletion(true);

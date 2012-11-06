@@ -1,13 +1,15 @@
-<%@ requires imports = "java.io.IOException,java.util.Iterator,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapred.MapReduceBase,org.apache.hadoop.mapred.OutputCollector,org.apache.hadoop.mapred.Reducer,org.apache.hadoop.mapred.Reporter,bsh.EvalError,bsh.Interpreter" %>
-	public static class <%= configName %>BeanshellReduce extends MapReduceBase implements
-	Reducer<LongWritable, Text, LongWritable, Text> {
+<%@ requires imports = "java.io.IOException,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Reducer,bsh.EvalError,bsh.Interpreter" %>
+	public static class <%= configName %>BeanshellReduce extends Reducer<LongWritable, Text, Text, NullWritable> {
 		private Interpreter interpreter = new Interpreter();
 		private String script = <%= script %>;
 		private Text newValue = new Text();
 		
-		public void reduce(LongWritable key, Iterator<Text> values,
-			OutputCollector<LongWritable, Text> output, Reporter reporter)
-			throws IOException {
+		/* (non-Javadoc)
+		 * @see org.apache.hadoop.mapreduce.Reducer#reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer.Context)
+		 */
+		@Override
+		protected void reduce(LongWritable key, Iterable<Text> values,
+				Context context) throws IOException, InterruptedException {
 			// Clear interpreter first
 			try {
 				interpreter.eval("clear();");
@@ -16,14 +18,14 @@
 				e.printStackTrace();
 			}
 			
-			while(values.hasNext()) {
+			for(Text value : values) {
 				try {
-					interpreter.set(<%= inputPort %>, values.next().toString());
+					interpreter.set(<%= inputPort %>, value.toString());
 					interpreter.eval(script);
 					
 					newValue.set(interpreter.get(<%= outputPort %>).toString());
 					
-					output.collect(key, newValue);
+					context.write(newValue, NullWritable.get());
 				} catch (EvalError e) {
 					System.err.println("Could not evaluate beanshell: " + e.getMessage());
 					e.printStackTrace();
