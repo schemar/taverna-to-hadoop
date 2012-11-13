@@ -1,6 +1,8 @@
 package de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,12 +30,23 @@ public abstract class ActivityConfig {
 	/** The output format class. */
 	private String outputFormat;
 	
+	// TODO not static, but depending on activity
+	/** The output key class. */
+	private String outputKeyClass = "Text.class";
+	
+	/** The output value class. */
+	private String outputValueClass = "NullWritable.class";
+	
 
 	/** The input ports. */
 	private List<String> inputPorts;
 	
 	/** The output ports. */
 	private List<String> outputPorts;
+	
+	
+	/** A map that maps input ports to the output ports of the previous processor. */
+	private Map<String, String> outputToNextInput;
 	
 	
 	/** The pattern for general placeholders. */
@@ -54,6 +67,7 @@ public abstract class ActivityConfig {
 	 */
 	public ActivityConfig(String name) {
 		this.name = name;
+		outputToNextInput = new HashMap<String, String>();
 	}
 	
 	/**
@@ -76,13 +90,49 @@ public abstract class ActivityConfig {
 	 * @return the java source code
 	 */
 	public abstract String getRun();
-
+	
 	/**
 	 * Lets this activity config get the individually required data from the Taverna configuration.
 	 * 
 	 * @param configuration the Taverna configuration
 	 */
 	public abstract void fetchActivitySpecificDataFromTavernaConfig(Configuration configuration);
+
+	public String getMultipleOutputsWrite() {
+		StringBuilder resultBuilder = new StringBuilder();
+		
+		for(String outputPort : outputPorts) {
+			resultBuilder.append("newValue.set(interpreter.get(\"");
+			resultBuilder.append(outputPort);			
+			resultBuilder.append("\").toString());\n");
+			resultBuilder.append("\t\t\t\t");
+			resultBuilder.append("mos.write(\"");
+			resultBuilder.append(outputToNextInput.get(outputPort));
+			resultBuilder.append("\", newValue, NullWritable.get());\n");
+			resultBuilder.append("\t\t\t\t");
+		}
+		
+		return resultBuilder.toString();
+	}
+	
+	public String getMultipleOutputsRun() {
+		StringBuilder resultBuilder = new StringBuilder();
+
+		for(String outputPort : outputPorts) {
+			resultBuilder.append("MultipleOutputs.addNamedOutput(jobConf");
+			resultBuilder.append(name);			
+			resultBuilder.append(", \"");
+			resultBuilder.append(outputToNextInput.get(outputPort));
+			resultBuilder.append("\", TextOutputFormat.class, ");
+			resultBuilder.append(outputKeyClass);
+			resultBuilder.append(", ");
+			resultBuilder.append(outputValueClass);
+			resultBuilder.append(");\n");
+			resultBuilder.append("\t\t");
+		}
+		
+		return resultBuilder.toString();
+	}
 	
 	@Override
 	public String toString() {
@@ -180,7 +230,7 @@ public abstract class ActivityConfig {
 	/**
 	 * @return the outputPorts
 	 */
-	public List<String> getOutputPort() {
+	public List<String> getOutputPorts() {
 		return outputPorts;
 	}
 
@@ -197,4 +247,47 @@ public abstract class ActivityConfig {
 	public void addOutputPort(String outputPort) {
 		this.outputPorts.add(outputPort);
 	}	
+	
+	/**
+	 * @param thisOutputPort the output port of this activity
+	 * @param nextInputPort the input port of the activity that gets the output from this output port
+	 */
+	public void addToPortMap(String thisOutputPort, String nextInputPort) {
+		outputToNextInput.put(thisOutputPort, nextInputPort);
+	}
+
+	/**
+	 * @return the outputToNextInput
+	 */
+	public Map<String, String> getOutputToNextInput() {
+		return outputToNextInput;
+	}
+
+	/**
+	 * @return the outputKeyClass
+	 */
+	public String getOutputKeyClass() {
+		return outputKeyClass;
+	}
+
+	/**
+	 * @param outputKeyClass the outputKeyClass to set
+	 */
+	public void setOutputKeyClass(String outputKeyClass) {
+		this.outputKeyClass = outputKeyClass;
+	}
+
+	/**
+	 * @return the outputValueClass
+	 */
+	public String getOutputValueClass() {
+		return outputValueClass;
+	}
+
+	/**
+	 * @param outputValueClass the outputValueClass to set
+	 */
+	public void setOutputValueClass(String outputValueClass) {
+		this.outputValueClass = outputValueClass;
+	}
 }
