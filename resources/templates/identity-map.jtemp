@@ -1,12 +1,12 @@
 <%@ requires imports = "java.io.IOException,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Mapper" %>
 
-public static class <%= configName %>IdentityMap extends Mapper<LongWritable, Text, LongWritable, Text> {
-	/* (non-Javadoc)
-	 * @see org.apache.hadoop.mapreduce.Mapper#map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper.Context)
-	 */
-	@Override
-	protected void map(LongWritable key, Text value, Context context)
-			throws IOException, InterruptedException {
-		context.write(key, value);
+	public static class <%= configName %>IdentityMap extends Mapper<LongWritable, Text, LongWritable, Text> {
+		/* (non-Javadoc)
+		 * @see org.apache.hadoop.mapreduce.Mapper#map(java.lang.Object, java.lang.Object, org.apache.hadoop.mapreduce.Mapper.Context)
+		 */
+		@Override
+		protected void map(LongWritable key, Text value, Context context)
+				throws IOException, InterruptedException {
+			context.write(key, value);
+		}
 	}
-}
