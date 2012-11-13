@@ -39,7 +39,7 @@ public class BeanshellConfig extends ActivityConfig {
 	@Override
 	public String getMapReduce() {
 		List<String> templates = new ArrayList<String>(2);
-		templates.add("identity-map.jtemp");
+		templates.add("multiple-inputs-map.jtemp");
 		templates.add("beanshell-activity-reduce.jtemp");
 		
 		return removePlaceholdersFromTemplate(templates);
