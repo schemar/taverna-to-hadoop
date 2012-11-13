@@ -26,7 +26,11 @@ public class BeanshellConfig extends ActivityConfig {
 	public void fetchActivitySpecificDataFromTavernaConfig(Configuration configuration) {
 		script = "";
 		try {
-			script = configuration.getPropertyResource().getPropertyAsString(BeanshellActivityParser.ACTIVITY_URI.resolve("#script")).replace("\"", "\\\"");
+			script = configuration.getPropertyResource().getPropertyAsString(BeanshellActivityParser.ACTIVITY_URI.resolve("#script"));
+			// Quotes
+			script = script.replaceAll("\"", "\\\"");
+			// Linebreaks
+			script = script.replaceAll("\\s", " ");
 		} catch (PropertyException e) {
 			logger.error("Could not get script for beanshell.", e);
 		}
@@ -83,7 +87,7 @@ public class BeanshellConfig extends ActivityConfig {
 			} else if(placeholderStripped.equals("<%=script%>")) {
 				result = result.replace(placeholder, "\"" + script + "\"");
 			} else if(placeholderStripped.equals("<%=inputPort%>")) {
-				result = result.replace(placeholder, "\"" + getInputPort() + "\"");
+				result = result.replace(placeholder, "\"" + getInputPorts().get(0) + "\"");
 			} else if(placeholderStripped.equals("<%=outputPort%>")) {
 				result = result.replace(placeholder, "\"" + getOutputPort() + "\"");
 			} else if(placeholderStripped.equals("<%=inputFormat%>")) {
