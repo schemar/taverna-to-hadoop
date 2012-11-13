@@ -89,7 +89,7 @@ public class BeanshellConfig extends ActivityConfig {
 			} else if(placeholderStripped.equals("<%=inputPort%>")) {
 				result = result.replace(placeholder, "\"" + getInputPorts().get(0) + "\"");
 			} else if(placeholderStripped.equals("<%=outputPort%>")) {
-				result = result.replace(placeholder, "\"" + getOutputPort() + "\"");
+				result = result.replace(placeholder, "\"" + getOutputPorts() + "\"");
 			} else if(placeholderStripped.equals("<%=inputFormat%>")) {
 				result = result.replace(placeholder, getInputFormat());
 			} else if(placeholderStripped.equals("<%=outputFormat%>")) {
@@ -98,6 +98,10 @@ public class BeanshellConfig extends ActivityConfig {
 				result = result.replace(placeholder, getInputPath());
 			} else if(placeholderStripped.equals("<%=outputPath%>")) {
 				result = result.replace(placeholder, getOutputPath());
+			} else if(placeholderStripped.equals("<%=multipleOutputsWrite%>")) {
+				result = result.replace(placeholder, getMultipleOutputsWrite());
+			} else if(placeholderStripped.equals("<%=multipleOutputsRun%>")) {
+				result = result.replace(placeholder, getMultipleOutputsRun());
 			}
 		}
 		
