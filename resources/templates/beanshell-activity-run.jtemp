@@ -15,4 +15,6 @@
 		FileInputFormat.setInputPaths(jobConf<%= configName %>, <%= inputPath %>);
 		FileOutputFormat.setOutputPath(jobConf<%= configName %>, new Path(<%= outputPath %>));
 		
+		<%= multipleOutputsRun %>
+		
 		jobConf<%= configName %>.waitForCompletion(true);

@@ -1,9 +1,12 @@
-<%@ requires imports = "java.io.IOException,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Reducer,bsh.EvalError,bsh.Interpreter" %>
+<%@ requires imports = "java.io.IOException,org.apache.hadoop.io.LongWritable,org.apache.hadoop.io.NullWritable,org.apache.hadoop.io.Text,org.apache.hadoop.mapreduce.Reducer,org.apache.hadoop.mapreduce.lib.output.MultipleOutputs,bsh.EvalError,bsh.Interpreter" %>
 	public static class <%= configName %>BeanshellReduce extends Reducer<LongWritable, Text, Text, NullWritable> {
 		private Interpreter interpreter = new Interpreter();
 		private String script = <%= script %>;
 		private Text newValue = new Text();
-		
+		private String valueString;
+		private String port;
+		private MultipleOutputs<Text, NullWritable> mos;
+	
 		/* (non-Javadoc)
 		 * @see org.apache.hadoop.mapreduce.Reducer#reduce(java.lang.Object, java.lang.Iterable, org.apache.hadoop.mapreduce.Reducer.Context)
 		 */
@@ -13,24 +16,63 @@
 			// Clear interpreter first
 			try {
 				interpreter.eval("clear();");
+
+				for(Text value : values) {
+	
+					valueString = value.toString();
+					valueString = valueString.substring(0, valueString.lastIndexOf(","));
+	
+					port = getPortFromInput(valueString.substring(valueString.lastIndexOf(",") + 1));
+					interpreter.set(port, valueString);
+				}
+				
+				interpreter.eval(script);
+				
+				<%= multipleOutputsWrite %>
 			} catch (EvalError e) {
-				System.err.println("Could not clear() beanshell interpreter: " + e.getMessage());
+				System.err.println("Could not evaluate beanshell: " + e.getMessage());
 				e.printStackTrace();
 			}
+		}
+
+		/* (non-Javadoc)
+		 * @see org.apache.hadoop.mapreduce.Reducer#setup(org.apache.hadoop.mapreduce.Reducer.Context)
+		 */
+		@Override
+		protected void setup(Context context) throws IOException,
+				InterruptedException {
+			super.setup(context);
+			mos = new MultipleOutputs<Text, NullWritable>(context);
+		}
+	
+		/* (non-Javadoc)
+		 * @see org.apache.hadoop.mapreduce.Reducer#cleanup(org.apache.hadoop.mapreduce.Reducer.Context)
+		 */
+		@Override
+		protected void cleanup(Context context) throws IOException,
+				InterruptedException {
+			super.cleanup(context);
+			mos.close();
+		}
+	
+		/**
+		 * Get the folder name that corresponds to the output port name.
+		 * 
+		 * Removes everything behind the last slash (including) and then before the last dash (including).
+		 * E.g. /this/is/a/path/portname/part0
+		 * becomes /this/is/a/path/portname and finally
+		 * portname
+		 * 
+		 * @param path the path of the file
+		 * @return the output port name
+		 */
+		private String getPortFromInput(String path) {
+			// Remove everything behind last slash (including)
+			path = path.substring(0, path.lastIndexOf("/"));
+			// Remove everything before last slash (including)
+			path = path.substring(path.lastIndexOf("/") + 1);
 			
-			for(Text value : values) {
-				try {
-					interpreter.set(<%= inputPort %>, value.toString());
-					interpreter.eval(script);
-					
-					newValue.set(interpreter.get(<%= outputPort %>).toString());
-					
-					context.write(newValue, NullWritable.get());
-				} catch (EvalError e) {
-					System.err.println("Could not evaluate beanshell: " + e.getMessage());
-					e.printStackTrace();
-				}
-			}
+			return path;
 		}
 	
 	}
