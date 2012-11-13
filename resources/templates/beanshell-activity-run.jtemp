@@ -7,7 +7,7 @@
 		jobConf<%= configName %>.setOutputKeyClass(Text.class);
 		jobConf<%= configName %>.setOutputValueClass(NullWritable.class);
 		
-		jobConf<%= configName %>.setMapperClass(<%= configName %>IdentityMap.class);
+		jobConf<%= configName %>.setMapperClass(<%= configName %>MultipleInputsMap.class);
 		jobConf<%= configName %>.setReducerClass(<%= configName %>BeanshellReduce.class);
 		
 		jobConf<%= configName %>.setJarByClass(<%= hadoopClassName %>.class);
