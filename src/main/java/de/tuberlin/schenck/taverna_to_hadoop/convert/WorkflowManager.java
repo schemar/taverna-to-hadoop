@@ -20,6 +20,7 @@ import uk.org.taverna.scufl2.api.core.DataLink;
 import uk.org.taverna.scufl2.api.core.Processor;
 import uk.org.taverna.scufl2.api.io.ReaderException;
 import uk.org.taverna.scufl2.api.io.WorkflowBundleIO;
+import uk.org.taverna.scufl2.api.port.InputProcessorPort;
 import uk.org.taverna.scufl2.api.port.InputWorkflowPort;
 import uk.org.taverna.scufl2.api.port.OutputProcessorPort;
 import uk.org.taverna.scufl2.api.port.OutputWorkflowPort;
@@ -84,10 +85,7 @@ public class WorkflowManager {
 		
 		Scufl2Tools scufl2tools = new Scufl2Tools();
 		NamedSet<OutputWorkflowPort> workflowOutputPorts = workflowBundle.getMainWorkflow().getOutputPorts();
-		if(workflowOutputPorts.size() != 1) {
-			String message = "Only one output port for workflow allowed at the moment";
-			logger.error(message, new UnsupportedWorkflowException(message));
-		}
+
 		logger.debug("Nr. of workflow output ports: " + workflowOutputPorts.size());
 		
 		// Get all activities which are linked to the output ports
@@ -95,7 +93,6 @@ public class WorkflowManager {
 		for(OutputWorkflowPort workflowOutPort : workflowOutputPorts) {
 			getPreviousProcessors(result, scufl2tools, workflowOutPort);
 		}
-		scufl2tools.datalinksTo(workflowOutputPorts.first());
 		
 		// Reverse, because we went through the workflow backwards
 		Collections.reverse(result);
@@ -149,9 +146,19 @@ public class WorkflowManager {
 				// Transfer data from Taverna
 				activityConfig.fetchActivitySpecificDataFromTavernaConfig(configuration);
 				
-				// TODO multiple ports
-				activityConfig.setOutputPort(processor.getOutputPorts().first().getName());
-				activityConfig.setInputPort(processor.getInputPorts().first().getName());
+				// Add all ports
+				List<String> outputPorts = new ArrayList<String>(processor.getOutputPorts().size());
+				List<String> inputPorts = new ArrayList<String>(processor.getInputPorts().size());
+				
+				for(OutputProcessorPort outputProcessorPort : processor.getOutputPorts()) {
+					outputPorts.add(outputProcessorPort.getName());
+				}
+				for(InputProcessorPort inputProcessorPort : processor.getInputPorts()) {
+					inputPorts.add(inputProcessorPort.getName());
+				}
+
+				activityConfig.setInputPorts(inputPorts);
+				activityConfig.setOutputPorts(outputPorts);
 			} catch (InstantiationException e) {
 				logger.error("Unsupported workflow.", new UnsupportedWorkflowException());
 				logger.error("Could not instanciate class " + className + ".", e);
