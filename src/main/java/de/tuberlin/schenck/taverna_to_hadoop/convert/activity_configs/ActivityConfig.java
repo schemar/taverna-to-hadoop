@@ -1,5 +1,6 @@
 package de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,11 +29,11 @@ public abstract class ActivityConfig {
 	private String outputFormat;
 	
 
-	/** The input port. */
-	private String inputPort;
+	/** The input ports. */
+	private List<String> inputPorts;
 	
-	/** The output port. */
-	private String outputPort;
+	/** The output ports. */
+	private List<String> outputPorts;
 	
 	
 	/** The pattern for general placeholders. */
@@ -156,31 +157,44 @@ public abstract class ActivityConfig {
 	}
 
 	/**
-	 * @return the inputPort
+	 * @return the inputPorts
 	 */
-	public String getInputPort() {
-		return inputPort;
+	public List<String> getInputPorts() {
+		return inputPorts;
 	}
 
 	/**
-	 * @param inputPort the inputPort to set
+	 * @param inputPort the inputPorts to set
 	 */
-	public void setInputPort(String inputPort) {
-		this.inputPort = inputPort;
+	public void setInputPorts(List<String> inputPorts) {
+		this.inputPorts = inputPorts;
 	}
 
 	/**
-	 * @return the outputPort
+	 * @param inputPort the inputPort to add
 	 */
-	public String getOutputPort() {
-		return outputPort;
+	public void addInputPort(String inputPort) {
+		this.inputPorts.add(inputPort);
 	}
 
 	/**
-	 * @param outputPort the outputPort to set
+	 * @return the outputPorts
 	 */
-	public void setOutputPort(String outputPort) {
-		this.outputPort = outputPort;
+	public List<String> getOutputPort() {
+		return outputPorts;
 	}
-	
+
+	/**
+	 * @param outputPorts the outputPorts to set
+	 */
+	public void setOutputPorts(List<String> outputPorts) {
+		this.outputPorts = outputPorts;
+	}
+
+	/**
+	 * @param outputPort the outputPort to add
+	 */
+	public void addOutputPort(String outputPort) {
+		this.outputPorts.add(outputPort);
+	}	
 }
