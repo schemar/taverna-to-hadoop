@@ -27,7 +27,7 @@ public class FileUtils {
 	 * @return the {@link String} read from the file
 	 */
 	public static String readFileIntoString(String fileName) {
-		logger.info("Reading file into string: " + fileName);
+		logger.debug("Reading file into string: " + fileName);
 		
 		String result = "";
 		try {
