@@ -31,6 +31,8 @@ The following placeholders are allowed within templates:
  * hadoopClassName
  * hadoopPackageName
  * counter (a counter that increments every time it is called)
+ * multipleOutputsRun
+ * multipleOutputsWrite
  * A number of activity specific variables (see classes source codes in package de.tuberlin.schenck.taverna_to_hadoop.convert.activity_configs
 * <%@ include file = "filename" %> (includes the content of file "filename" at that position)
 * <%@ include mapreduce %> (puts the mapper and reducer classes at that position)
