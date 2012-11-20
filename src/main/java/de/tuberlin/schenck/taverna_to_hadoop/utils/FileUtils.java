@@ -117,14 +117,23 @@ public class FileUtils {
 		}
 	}
 
+	/**
+	 * Creates a jar file with compiled versions of the generated classes.
+	 * First, the given class in the given package is compiled.
+	 * Then it is added to a .jar and declared the main class in the manifest.
+	 * 
+	 * @param output the resulting .jar file.
+	 * @param packageName the package name of the class to compile/jar.
+	 * @param className the class name of the class to compile/jar.
+	 */
 	public static void createJar(String output, String packageName, String className) {
 		logger.info("Compiling generated classes");
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		
+
 		String javaLocation = "src/main/java/" + packageName.replaceAll("\\.", "/") + "/" + className + ".java";
 		if(compiler.run(null, null, null, javaLocation, "-d", "target/") != 0)
 			logger.error("Could not compile generated classes");
-		
+
 		logger.info("Generating JAR file.");
 		// Create Manifest
 		Manifest manifest = new Manifest();
@@ -134,7 +143,7 @@ public class FileUtils {
 		JarOutputStream jarOutStream = null;
 		try {
 			jarOutStream = new JarOutputStream(new FileOutputStream(output), manifest);
-			
+
 			String classLocation = "target/" + packageName.replaceAll("\\.", "/") + "/" + className + ".class";
 			addToJar(new File(classLocation), jarOutStream);
 		} catch (FileNotFoundException e) {
@@ -146,6 +155,13 @@ public class FileUtils {
 		}
 	}
 
+	/**
+	 * Adds a file to a jar output stream.
+	 * 
+	 * @param source the file to add.
+	 * @param jarOutStream the jar output stream to add the file to.
+	 * @throws IOException
+	 */
 	private static void addToJar(File source, JarOutputStream jarOutStream) throws IOException {
 		BufferedInputStream inputStream = null;
 		try {
@@ -156,12 +172,12 @@ public class FileUtils {
 			inputStream = new BufferedInputStream(new FileInputStream(source));
 
 			byte[] buffer = new byte[1024];
-			
+
 			int count = 0;
 			while ((count = inputStream.read(buffer)) != -1) {
 				jarOutStream.write(buffer, 0, count);
 			}
-			
+
 			jarOutStream.closeEntry();
 		} finally {
 			try { inputStream.close(); } catch (Exception e) { /*ignore*/ }
