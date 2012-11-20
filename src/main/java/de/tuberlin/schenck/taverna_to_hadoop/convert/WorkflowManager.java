@@ -249,19 +249,19 @@ public class WorkflowManager {
 		for(ActivityConfig activityConfig : activityList) {
 			// TODO what if input from args
 			StringBuilder pathBuilder = new StringBuilder();
-			pathBuilder.append("\"");
+			pathBuilder.append("pathPrefix + \"");
 			for(String inputPort : activityConfig.getInputPorts()) {
 				pathBuilder.append(activityConfig.getName());
 				pathBuilder.append("_");
 				pathBuilder.append(inputPort);
-				pathBuilder.append(",");
+				pathBuilder.append(",\" + pathPrefix + \"");
 			}
 			
-			pathBuilder.deleteCharAt(pathBuilder.length() - 1);
+			pathBuilder.delete(pathBuilder.length() - 19, pathBuilder.length());
 			pathBuilder.append("\"");
 			inputPath = pathBuilder.toString();
 			
-			intermediatePath = "\"" + activityConfig.getOutputToNextInput().get(activityConfig.getOutputPorts().get(0)) + "\"";
+			intermediatePath = "pathPrefix + \"" + activityConfig.getOutputToNextInput().get(activityConfig.getOutputPorts().get(0)) + "\"";
 
 			activityConfig.setInputPath(inputPath);
 			activityConfig.setOutputPath(intermediatePath);

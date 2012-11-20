@@ -7,9 +7,11 @@ import org.apache.hadoop.conf.Configured;
 <%@ imports %>
 
 public class <%= hadoopClassName %> extends Configured implements Tool {
+	private static String pathPrefix = "";
+	
 	<%@ include mapreduce %>
 
-	public int run(String[] args) throws Exception {
+	public int run(String[] args) throws Exception {		
 		<%@ include run %>
 		
 		return 0;
@@ -20,9 +22,19 @@ public class <%= hadoopClassName %> extends Configured implements Tool {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
+		parseArgs(args);
 		int exitCode = ToolRunner.run(new <%= hadoopClassName %>(), args);
 		
 		System.exit(exitCode);
 	}
 
+	private static void parseArgs(String[] args) {
+		for(String arg : args) {
+			if(arg.startsWith("--pathprefix=")) {
+				pathPrefix = arg.substring(13);
+				if(!pathPrefix.endsWith("/"))
+					pathPrefix += "/";
+			}
+		}
+	}
 }
