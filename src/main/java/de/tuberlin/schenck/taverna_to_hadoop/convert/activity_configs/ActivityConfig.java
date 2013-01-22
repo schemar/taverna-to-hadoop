@@ -30,16 +30,16 @@ public abstract class ActivityConfig {
 	/** The output format class. */
 	private String outputFormat;
 	
-	// TODO not static, but depending on activity
+	// TODO not static, but depending on activity (IF necessary)
 	/** The output key class. */
 	private String outputKeyClass = "Text.class";
 	
 	/** The output value class. */
-	private String outputValueClass = "NullWritable.class";
+	private String outputValueClass = "Text.class";
 	
 
-	/** The input ports. */
-	private List<String> inputPorts;
+	/** The input ports and their originating activity. */
+	private Map<String, String> inputPorts;
 	
 	/** The output ports. */
 	private List<String> outputPorts;
@@ -108,7 +108,7 @@ public abstract class ActivityConfig {
 			resultBuilder.append("\t\t\t\t");
 			resultBuilder.append("mos.write(\"");
 			resultBuilder.append(outputToNextInput.get(outputPort));
-			resultBuilder.append("\", newValue, NullWritable.get());\n");
+			resultBuilder.append("\", key, newValue);\n");
 			resultBuilder.append("\t\t\t\t");
 		}
 		
@@ -209,22 +209,22 @@ public abstract class ActivityConfig {
 	/**
 	 * @return the inputPorts
 	 */
-	public List<String> getInputPorts() {
+	public Map<String, String> getInputPorts() {
 		return inputPorts;
 	}
 
 	/**
 	 * @param inputPort the inputPorts to set
 	 */
-	public void setInputPorts(List<String> inputPorts) {
+	public void setInputPorts(Map<String, String> inputPorts) {
 		this.inputPorts = inputPorts;
 	}
 
 	/**
 	 * @param inputPort the inputPort to add
 	 */
-	public void addInputPort(String inputPort) {
-		this.inputPorts.add(inputPort);
+	public void addInputPort(String inputPort, String originatingActivity) {
+		this.inputPorts.put(inputPort, originatingActivity);
 	}
 
 	/**
