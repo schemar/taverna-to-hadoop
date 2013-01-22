@@ -6,8 +6,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -148,7 +150,7 @@ public class WorkflowManager {
 
 				// Add all ports
 				List<String> outputPorts = new ArrayList<String>(processor.getOutputPorts().size());
-				List<String> inputPorts = new ArrayList<String>(processor.getInputPorts().size());
+				Map<String, String> inputPorts = new HashMap<String, String>(processor.getInputPorts().size());
 
 				for(OutputProcessorPort outputProcessorPort : processor.getOutputPorts()) {
 					outputPorts.add(outputProcessorPort.getName());
@@ -158,7 +160,7 @@ public class WorkflowManager {
 						String outname = "";
 						if(dataLinkToNext.getSendsTo() instanceof InputProcessorPort) {
 							InputProcessorPort inPort = (InputProcessorPort) dataLinkToNext.getSendsTo();
-							outname = inPort.getParent().getName() + "_" + dataLinkToNext.getSendsTo().getName();
+							outname = inPort.getParent().getName() + dataLinkToNext.getSendsTo().getName();
 						} else if(dataLinkToNext.getSendsTo() instanceof OutputWorkflowPort) {
 							outname = dataLinkToNext.getSendsTo().getName();
 						} else {
@@ -169,7 +171,18 @@ public class WorkflowManager {
 					}
 				}
 				for(InputProcessorPort inputProcessorPort : processor.getInputPorts()) {
-					inputPorts.add(inputProcessorPort.getName());
+					for(DataLink dataLinkFromPrevious : scufl2tools.datalinksTo(inputProcessorPort)) {
+						String outname = "";
+						if(dataLinkFromPrevious.getReceivesFrom() instanceof OutputProcessorPort) {
+							OutputProcessorPort outPort = (OutputProcessorPort) dataLinkFromPrevious.getReceivesFrom();
+							outname = outPort.getParent().getName();
+						} else if(dataLinkFromPrevious.getReceivesFrom() instanceof InputWorkflowPort) {
+							// Keep empty String
+						} else {
+							throw new UnsupportedWorkflowException("Unknown port type.");
+						}
+						inputPorts.put(inputProcessorPort.getName(), outname);
+					}
 				}
 
 				activityConfig.setInputPorts(inputPorts);
@@ -250,23 +263,25 @@ public class WorkflowManager {
 			// TODO what if input from args
 			StringBuilder pathBuilder = new StringBuilder();
 			pathBuilder.append("pathPrefix + \"");
-			for(String inputPort : activityConfig.getInputPorts()) {
+			for(String inputPort : activityConfig.getInputPorts().keySet()) {
+				pathBuilder.append(activityConfig.getInputPorts().get(inputPort));
+				pathBuilder.append("out/");
 				pathBuilder.append(activityConfig.getName());
-				pathBuilder.append("_");
 				pathBuilder.append(inputPort);
-				pathBuilder.append(",\" + pathPrefix + \"");
+				pathBuilder.append("*,\" + pathPrefix + \"");
 			}
 			
+			// Remove last ",\" + pathPrefix + \""
 			pathBuilder.delete(pathBuilder.length() - 19, pathBuilder.length());
 			pathBuilder.append("\"");
 			inputPath = pathBuilder.toString();
 			
-			intermediatePath = "pathPrefix + \"" + activityConfig.getOutputToNextInput().get(activityConfig.getOutputPorts().get(0)) + "\"";
+			intermediatePath = "pathPrefix + \"" + activityConfig.getName() + "out\"";
 
 			activityConfig.setInputPath(inputPath);
 			activityConfig.setOutputPath(intermediatePath);
 
-			activityConfig.setInputFormat("TextInputFormat");
+			activityConfig.setInputFormat("KeyValueTextInputFormat");
 			activityConfig.setOutputFormat("TextOutputFormat");
 
 			resultBuilder.append(activityConfig.getRun());
