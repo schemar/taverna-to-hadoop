@@ -13,6 +13,9 @@
 		@Override
 		protected void reduce(Text key, Iterable<Text> values,
 				Context context) throws IOException, InterruptedException {
+			// Empty value string
+			valueString = "";
+			
 			// Clear interpreter first
 			try {
 				interpreter.eval("clear();");
