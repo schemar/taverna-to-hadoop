@@ -15,17 +15,21 @@ Use -h or --help as program argument to get the help output.
 
 ## Demo
 
+### Prerequisites
+
 * Install Oracle Java (JDK 1.7)
 * Install Taverna
 * Install Eclipse
 * Download/install Hadoop 1.0.3 from http://archive.apache.org/dist/hadoop/common/hadoop-1.0.3/
 
+### Getting the project
 
 * In Eclipse
     * Check out from SCM: https://github.com/schenck/taverna-to-hadoop.git
-    * Create package "generated" under "taverna_to_hadoop" (so you have "de.tuberlin.schenck.taverna_to_hadoop.generated")
-    * Use Oracle Java, nothing else (OpenJDK will not work due to "ToolProvider.getSystemJavaCompiler()" returning "null")
+    * Create package `generated` under `taverna_to_hadoop` (so you have `de.tuberlin.schenck.taverna_to_hadoop.generated`)
+    * Use Oracle Java, nothing else (OpenJDK will not work due to `ToolProvider.getSystemJavaCompiler()` returning `null`)
 
+### Run the Demo
 
 * To test/demo the compiler:
     * In Eclipse, open the Run Configurations
@@ -48,9 +52,10 @@ Use -h or --help as program argument to get the help output.
              * In this example, the export will be to "taverna-to-hadoop/target/MultipleWorkFlows.jar"
     * Now we have an uberjar to run on Hadoop. For demo/testing purposes, there is already a folder "taverna-to-hadoop/testrun" that contains input for the workflow "multiple_ports.t2flow" used in this example
     * To run the generated jar as a Hadoop job, execute the following from within the "testrun" folder:
-         * <path-to-hadoop-1.0.3>/bin/hadoop -jar <path-to-taverna-to-hadoop>/target/MultipleWorkFlows.jar
+         * \<path-to-hadoop-1.0.3>/bin/hadoop -jar <path-to-taverna-to-hadoop>/target/MultipleWorkFlows.jar
          * Now Hadoop will execute the series of jobs using the provided input in the folder "out" within "testrun"
 
+### Things to note
 
 * Inputs are all files within folders named "servicenameportname", e.g. onein1 for service "one" and port "in1"
 * All inputs need to be in the folder "out"
