@@ -64,7 +64,8 @@ Use -h or --help as program argument to get the help output.
 
 ## Extending the Compiler
 
-In the future it shall be possible to extend the compiler easily in order to incorporate new Taverna activities.
+Currently, the compiler supports workflows with any number of beanshell services, which can have an arbitrary number of input and output ports and are combined in an arbitrary order.
+In the future it shall be possible to extend the compiler easily in order to incorporate new Taverna activities, e.g. `Local Tool Invocation`.
 The compiler uses a template per activity approach to translate individual activities.
 
 ### Templates
@@ -75,8 +76,7 @@ The file ending should be "jtemp", but does not matter.
 
 The following placeholders are allowed within templates:
 
-* `<%= nameOfVariable %>` (put the content of that variable at that position)
-    * Available variables are:
+* `<%= nameOfVariable %>` (put the content of that variable at that position). Available variables are:
     * `hadoopClassName`
     * `hadoopPackageName`
     * `counter` (a counter that increments every time it is called)
