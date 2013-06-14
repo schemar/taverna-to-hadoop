@@ -21,16 +21,37 @@ Use -h or --help as program argument to get the help output.
 
 - In Eclipse
  - Check out from SCM: https://github.com/schenck/taverna-to-hadoop.git
- - Create package "generated" under "taverna_to_hadoop"
+ - Create package "generated" under "taverna_to_hadoop" (so you have "de.tuberlin.schenck.taverna_to_hadoop.generated")
  - Use Oracle Java, nothing else (OpenJDK will not work due to "ToolProvider.getSystemJavaCompiler()" returning "null")
 
-- For Test:
- - Run 
- - In this example, all inputs need to have the same number of lines
+- To test/demo the compiler:
+ - In Eclipse, open the Run Configurations
+ - Create a new one and name it whatever you want
+  - As Project choose "taverna-to-hadoop"
+  - As main class choose "de.tuberlin.schenck.taverna_to_hadoop.TavernaToHadoopMain.java"
+  - If you want a simple demo, add the program arguments "-i resources/workflows/multiple_ports.t2flow -o MultipleWorkFlows.jar" (Of course you can choose another workflow or output name, -h prints the help)
+ - Click on "Run"
+ - Now the compiler will compile the workflow into a series of Hadoop jobs
+  - It will convert the workflow to a linear list of map and reduce jobs
+  - It will create a class in the package "de.tuberlin.schenck.taverna_to_hadoop.generated" (See above. There will be a NullpointerException if you did not create the package)
+  - It will package that class into a runnable .jar file
+  - Please note that this is no "Uberjar", meaning the dependencies are not packaged into the jar. If you want to create an Uberjar to use with Hadoop, do the following:
+   - In Eclipse, right click on the newly generated class file (in this case "de.tuberlin.schenck.taverna_to_hadoop.generated.MultipleWorkFlows.java")
+   - Choose "Run as ... -> Java Application"
+   - The run will fail, because there is no Hadoop involved yet
+   - Select "File->Export->Java->Runnabel JAR file", use the newly created "Launch configuration" (in this case "MultipleWorkFlows")
+   - Choose to extract required libraries
+   - Choose an export destination and export into the jar
+   - In this example, the export will be to "taverna-to-hadoop/target/MultipleWorkFlows.jar"
+ - Now we have an uberjar to run on Hadoop. For demo/testing purposes, there is already a folder "taverna-to-hadoop/testrun" that contains input for the workflow "multiple_ports.t2flow" used in this example
+ - To run the generated jar as a Hadoop job, execute the following from within the "testrun" folder:
+  - <path-to-hadoop-1.0.3>/bin/hadoop -jar <path-to-taverna-to-hadoop>/target/MultipleWorkFlows.jar
+  - Now Hadoop will execute the series of jobs using the provided input in the folder "out" within "testrun"
 
-- Inputs are named "servicenameportname", e.g. onein1 for service "one" and port "in1"
+- Inputs are all files within folders named "servicenameportname", e.g. onein1 for service "one" and port "in1"
 - All inputs need to be in the folder "out"
 - All inputs need to have key and value, key being the line number
+- In this example, all inputs need to have the same number of lines
 
 ## Extending the Compiler
 
