@@ -20,10 +20,12 @@ Use -h or --help as program argument to get the help output.
 * Install Eclipse
 * Download/install Hadoop 1.0.3 from http://archive.apache.org/dist/hadoop/common/hadoop-1.0.3/
 
+
 * In Eclipse
     * Check out from SCM: https://github.com/schenck/taverna-to-hadoop.git
     * Create package "generated" under "taverna_to_hadoop" (so you have "de.tuberlin.schenck.taverna_to_hadoop.generated")
     * Use Oracle Java, nothing else (OpenJDK will not work due to "ToolProvider.getSystemJavaCompiler()" returning "null")
+
 
 * To test/demo the compiler:
     * In Eclipse, open the Run Configurations
@@ -34,7 +36,7 @@ Use -h or --help as program argument to get the help output.
     * Click on "Run"
     * Now the compiler will compile the workflow into a series of Hadoop jobs
          * It will convert the workflow to a linear list of map and reduce jobs
-         * will create a class in the package "de.tuberlin.schenck.taverna_to_hadoop.generated" (See above. There will be a NullpointerException if you did not create the package)
+         * It will create a class in the package "de.tuberlin.schenck.taverna_to_hadoop.generated" (See above. There will be a NullpointerException if you did not create the package)
          * It will package that class into a runnable .jar file
          * Please note that this is no "Uberjar", meaning the dependencies are not packaged into the jar. If you want to create an Uberjar to use with Hadoop, do the following:
              * In Eclipse, right click on the newly generated class file (in this case "de.tuberlin.schenck.taverna_to_hadoop.generated.MultipleWorkFlows.java")
@@ -48,6 +50,7 @@ Use -h or --help as program argument to get the help output.
     * To run the generated jar as a Hadoop job, execute the following from within the "testrun" folder:
          * <path-to-hadoop-1.0.3>/bin/hadoop -jar <path-to-taverna-to-hadoop>/target/MultipleWorkFlows.jar
          * Now Hadoop will execute the series of jobs using the provided input in the folder "out" within "testrun"
+
 
 * Inputs are all files within folders named "servicenameportname", e.g. onein1 for service "one" and port "in1"
 * All inputs need to be in the folder "out"
