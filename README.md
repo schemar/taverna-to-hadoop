@@ -12,6 +12,25 @@ For more information see http://hadoop.apache.org/ or http://www.taverna.org.uk/
 ## Usage
 
 Use -h or --help as program argument to get the help output.
+## Demo
+
+- Install Oracle Java (JDK 1.7)
+- Install Taverna
+- Install Eclipse
+- Download/install Hadoop 1.0.3 from http://archive.apache.org/dist/hadoop/common/hadoop-1.0.3/
+
+- In Eclipse
+ - Check out from SCM: https://github.com/schenck/taverna-to-hadoop.git
+ - Create package "generated" under "taverna_to_hadoop"
+ - Use Oracle Java, nothing else (OpenJDK will not work due to "ToolProvider.getSystemJavaCompiler()" returning "null")
+
+- For Test:
+ - Run 
+ - In this example, all inputs need to have the same number of lines
+
+- Inputs are named "servicenameportname", e.g. onein1 for service "one" and port "in1"
+- All inputs need to be in the folder "out"
+- All inputs need to have key and value, key being the line number
 
 ## Extending the Compiler
 
